@@ -26,6 +26,12 @@ class Api::V1::ReviewsController < ApplicationController
   end
 
   private
-  def set_game; @game = Game.find(params[:game_id]); end
-  def review_params; params.require(:review).permit(:rating, :comment); end
+
+  def set_game
+    @game = Game.find(params[:game_id])
+  end
+
+  def review_params
+    params.require(:review).permit(:rating, :comment)
+  end
 end

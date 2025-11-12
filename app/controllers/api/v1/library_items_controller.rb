@@ -30,5 +30,8 @@ class Api::V1::LibraryItemsController < ApplicationController
   end
 
   private
-  def li_params; params.require(:library_item).permit(:game_id, :status); end
+
+  def li_params
+    params.require(:library_item).permit(:game_id, :status)
+  end
 end

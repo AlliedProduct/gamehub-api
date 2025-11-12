@@ -1,12 +1,12 @@
 class Api::V1::AuthController < ApplicationController
-  before_action :authenticate_user!, only: [:me, :sign_out]
+  before_action :authenticate_user!, only: [ :me, :sign_out ]
 
   def sign_in
     user = User.find_for_database_authentication(email: params[:email])
     return render json: { error: "Invalid credentials" }, status: :unauthorized unless user&.valid_password?(params[:password])
 
     token = Warden::JWTAuth::UserEncoder.new.call(user, :user, nil).first
-    response.set_header('Authorization', "Bearer #{token}")
+    response.set_header("Authorization", "Bearer #{token}")
     render json: { user: { id: user.id, email: user.email, username: user.username } }
   end
 

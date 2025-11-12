@@ -1,6 +1,6 @@
 class Api::V1::GamesController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_game, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, except: [ :index, :show ]
+  before_action :set_game, only: [ :show, :update, :destroy ]
 
   def index
     page     = params[:page].to_i.positive? ? params[:page].to_i : 1
