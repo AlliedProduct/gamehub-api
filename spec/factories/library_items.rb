@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :library_item do
-    user { nil }
-    game { nil }
-    status { "MyString" }
+    association :user
+    association :game
+    status { %w[playing completed backlog wishlist dropped].sample }
   end
 end

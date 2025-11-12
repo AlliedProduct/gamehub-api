@@ -3,9 +3,28 @@ class Api::V1::GamesController < ApplicationController
   before_action :set_game, only: [:show, :update, :destroy]
 
   def index
-    q = Game.ransack(params[:q]) # e.g. q[title_i_cont]=zelda
-    pagy, games = pagy(q.result.order(created_at: :desc), items: (params[:per_page] || 12))
-    render json: { data: games, pagination: pagy_metadata(pagy) }
+    page     = params[:page].to_i.positive? ? params[:page].to_i : 1
+    per_page = params[:per_page].to_i.positive? ? params[:per_page].to_i : 12
+
+    scope = Game.order(created_at: :desc)
+    count = scope.count
+    games = scope.offset((page - 1) * per_page).limit(per_page)
+
+    pages = (count.to_f / per_page).ceil
+    nxt   = (page < pages) ? page + 1 : nil
+    prv   = (page > 1) ? page - 1 : nil
+
+    render json: {
+      data: games,
+      pagination: {
+        page: page,
+        items: per_page,
+        count: count,
+        pages: pages,
+        next: nxt,
+        prev: prv
+      }
+    }
   end
 
   def show
@@ -35,7 +54,11 @@ class Api::V1::GamesController < ApplicationController
   end
 
   private
-  def set_game; @game = Game.find(params[:id]); end
+
+  def set_game
+    @game = Game.find(params[:id])
+  end
+
   def game_params
     params.require(:game).permit(:title, :platform, :genre, :release_year)
   end
