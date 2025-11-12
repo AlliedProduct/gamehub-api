@@ -45,3 +45,13 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 end
+
+gem "devise", "~> 4.9"
+gem "devise-jwt", "~> 0.12.1"
+gem "pagy", "~> 43.0"
+gem "ransack", "~> 4.4"
+gem "rack-cors", "~> 3.0"
+gem "rspec-rails", "~> 8.0"
+gem "factory_bot_rails", "~> 6.5"
+gem "shoulda-matchers", "~> 7.0"
+gem "faker", "~> 3.5"
