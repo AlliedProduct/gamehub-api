@@ -48,7 +48,7 @@ end
 
 gem "devise", "~> 4.9"
 gem "devise-jwt", "~> 0.12.1"
-gem "pagy", "~> 43.0"
+gem "pagy", "~> 43.1"
 gem "ransack", "~> 4.4"
 gem "rack-cors", "~> 3.0"
 gem "rspec-rails", "~> 8.0"
