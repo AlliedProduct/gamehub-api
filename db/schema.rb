@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_12_223725) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_16_192726) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -22,7 +22,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_223725) do
     t.float "avg_rating", default: 0.0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "status"
+    t.integer "rating"
+    t.text "notes"
+    t.bigint "user_id"
     t.index ["title"], name: "index_games_on_title"
+    t.index ["user_id"], name: "index_games_on_user_id"
   end
 
   create_table "jwt_denylist", force: :cascade do |t|
@@ -39,16 +44,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_223725) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["jti"], name: "index_jwt_denylists_on_jti"
-  end
-
-  create_table "library_items", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "game_id", null: false
-    t.string "status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["game_id"], name: "index_library_items_on_game_id"
-    t.index ["user_id"], name: "index_library_items_on_user_id"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -75,8 +70,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_223725) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "library_items", "games"
-  add_foreign_key "library_items", "users"
+  add_foreign_key "games", "users"
   add_foreign_key "reviews", "games"
   add_foreign_key "reviews", "users"
 end

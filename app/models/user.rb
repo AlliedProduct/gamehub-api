@@ -8,7 +8,7 @@ class User < ApplicationRecord
          jwt_revocation_strategy: JwtDenylist
 
   has_many :reviews, dependent: :destroy
-  has_many :library_items, dependent: :destroy
-  has_many :games, through: :library_items
+  has_many :games, dependent: :destroy
+
   validates :username, presence: true, uniqueness: true
 end

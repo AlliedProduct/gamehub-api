@@ -1,65 +1,58 @@
 class Api::V1::GamesController < ApplicationController
-  before_action :authenticate_user!, except: [ :index, :show ]
-  before_action :set_game, only: [ :show, :update, :destroy ]
+  before_action :authenticate_user!
+  before_action :set_game, only: [:show, :update, :destroy]
 
+  # GET /api/v1/games
   def index
-    page     = params[:page].to_i.positive? ? params[:page].to_i : 1
-    per_page = params[:per_page].to_i.positive? ? params[:per_page].to_i : 12
-
-    scope = Game.order(created_at: :desc)
-    count = scope.count
-    games = scope.offset((page - 1) * per_page).limit(per_page)
-
-    pages = (count.to_f / per_page).ceil
-    nxt   = (page < pages) ? page + 1 : nil
-    prv   = (page > 1) ? page - 1 : nil
-
-    render json: {
-      data: games,
-      pagination: {
-        page: page,
-        items: per_page,
-        count: count,
-        pages: pages,
-        next: nxt,
-        prev: prv
-      }
-    }
+    games = current_user.games.order(created_at: :desc)
+    render json: games, status: :ok
   end
 
+  # GET /api/v1/games/:id
   def show
-    render json: @game.as_json(include: { reviews: { include: :user } })
+    render json: @game, status: :ok
   end
 
+  # POST /api/v1/games
   def create
-    game = Game.new(game_params)
-    if game.save
-      render json: game, status: :created
-    else
-      render json: { errors: game.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
+    @game = current_user.games.build(game_params)
 
-  def update
-    if @game.update(game_params)
-      render json: @game
+    if @game.save
+      render json: @game, status: :created
     else
       render json: { errors: @game.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
+  # PUT /api/v1/games/:id
+  def update
+    if @game.update(game_params)
+      render json: @game, status: :ok
+    else
+      render json: { errors: @game.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  # DELETE /api/v1/games/:id
   def destroy
-    @game.destroy!
+    @game.destroy
     head :no_content
   end
 
   private
 
   def set_game
-    @game = Game.find(params[:id])
+    @game = current_user.games.find(params[:id])
   end
 
   def game_params
-    params.require(:game).permit(:title, :platform, :genre, :release_year)
+    params.require(:game).permit(
+      :title,
+      :platform,
+      :genre,
+      :status,
+      :rating,
+      :notes
+    )
   end
 end
