@@ -2,27 +2,17 @@ class Api::V1::ReviewsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_game
 
+  # POST /api/v1/games/:game_id/reviews
   def create
-    review = @game.reviews.new(review_params.merge(user: current_user))
+    review = Review.find_or_initialize_by(user: current_user, game: @game)
+    review.assign_attributes(review_params)
+
     if review.save
+      @game.recalc_avg_rating!
       render json: review, status: :created
     else
       render json: { errors: review.errors.full_messages }, status: :unprocessable_entity
     end
-  end
-
-  def update
-    review = current_user.reviews.find(params[:id])
-    if review.update(review_params)
-      render json: review
-    else
-      render json: { errors: review.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    current_user.reviews.find(params[:id]).destroy!
-    head :no_content
   end
 
   private
