@@ -7,4 +7,13 @@ class LibraryItem < ApplicationRecord
   validates :status, inclusion: { in: STATUSES, allow_nil: true }
   validates :rating, numericality: { in: 1..10, allow_nil: true }
   validates :game_id, uniqueness: { scope: :user_id }
+
+after_commit :update_game_avg
+
+private
+
+def update_game_avg
+  game.recalc_avg_rating_from_library_items!
+end
+
 end

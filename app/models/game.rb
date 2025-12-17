@@ -6,6 +6,12 @@ class Game < ApplicationRecord
   validates :title, presence: true
 
   def recalc_avg_rating!
-    update!(avg_rating: reviews.average(:rating) || 0.0)
+    avg = reviews.where.not(rating: nil).average(:rating)&.to_f
+    update_column(:avg_rating, avg)
+  end
+
+  def recalc_avg_rating_from_library_items!
+    avg = library_items.where.not(rating: nil).average(:rating)&.to_f
+    update_column(:avg_rating, avg)
   end
 end

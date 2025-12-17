@@ -1,7 +1,8 @@
 FactoryBot.define do
   factory :library_item do
-    association :user
-    association :game
-    status { %w[playing completed backlog wishlist dropped].sample }
+    user
+    game
+    status { "completed" }
+    rating { 8 }
   end
 end
