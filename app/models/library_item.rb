@@ -16,6 +16,4 @@ private
 def update_game_avg
   game.recalc_avg_rating_from_library_items!
 end
-
-
 end

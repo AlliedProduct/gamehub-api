@@ -1,5 +1,5 @@
 class Api::V1::AuthController < ApplicationController
-  before_action :authenticate_user!, only: [:me, :sign_out]
+  before_action :authenticate_user!, only: [ :me, :sign_out ]
 
   # POST /api/v1/auth/sign_in
   def sign_in
@@ -9,7 +9,7 @@ class Api::V1::AuthController < ApplicationController
     user = User.find_for_database_authentication(email: email)
 
     unless user&.valid_password?(password)
-      return render json: { errors: ["Invalid email or password"] }, status: :unauthorized
+      return render json: { errors: [ "Invalid email or password" ] }, status: :unauthorized
     end
 
     token = Warden::JWTAuth::UserEncoder.new.call(user, :user, nil).first

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe User, type: :model do
-  subject { create(:user) } 
+  subject { create(:user) }
 
   it { should have_many(:library_items).dependent(:destroy) }
   it { should have_many(:games).through(:library_items) }

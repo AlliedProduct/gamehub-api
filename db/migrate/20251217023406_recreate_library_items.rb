@@ -11,6 +11,6 @@ class RecreateLibraryItems < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :library_items, [:user_id, :game_id], unique: true
+    add_index :library_items, [ :user_id, :game_id ], unique: true
   end
 end

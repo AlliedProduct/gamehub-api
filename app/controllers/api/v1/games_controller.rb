@@ -79,7 +79,7 @@ class Api::V1::GamesController < ApplicationController
   end
 
   def present(li)
-    li.game.as_json(only: [:id, :title, :platform, :genre, :release_year, :avg_rating]).merge(
+    li.game.as_json(only: [ :id, :title, :platform, :genre, :release_year, :avg_rating ]).merge(
       "status" => li.status,
       "rating" => li.rating,
       "notes" => li.notes
