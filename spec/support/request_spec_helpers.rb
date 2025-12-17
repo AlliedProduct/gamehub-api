@@ -4,7 +4,7 @@ module RequestSpecHelpers
   end
 
   def auth_headers_for(user, extra_headers = {})
-    token, _payload = Warden::JWTAuth::UserEncoder.new.call(user, :user, nil)
-    extra_headers.merge('Authorization' => "Bearer #{token}")
+    token = Warden::JWTAuth::UserEncoder.new.call(user, :user, nil).first
+    { "Authorization" => "Bearer #{token}" }.merge(extra_headers)
   end
 end
