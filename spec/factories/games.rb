@@ -3,8 +3,7 @@ FactoryBot.define do
     title { "Test Game" }
     platform { "PC" }
     genre { "Action" }
-    status { "planning" }
-    rating { 5 }
-    association :user
+    release_year { 2020 }
+    avg_rating { nil }
   end
 end
